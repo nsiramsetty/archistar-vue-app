@@ -1,5 +1,5 @@
-export const UPDATE_MOBILE = ({commit}, mobile) => {
-  commit('UPDATE_MOBILE', mobile);
+export const UPDATE_FILTERS = ({commit}, filters) => {
+  commit('UPDATE_FILTERS', filters);
 };
 
 export const CLEAR_ALL_DATA = ({commit}) => {

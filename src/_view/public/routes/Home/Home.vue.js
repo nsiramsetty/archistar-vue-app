@@ -1,4 +1,6 @@
-let testBlob = require('../../../../_data/testBlob')
+let testBlob = require('../../../../_data/testBlob');
+import store from '../../../../_store';
+import {initialState} from "../../../../_store/initialState";
 import {
   MglAttributionControl,
   MglFullscreenControl,
@@ -6,8 +8,8 @@ import {
   MglMap,
   MglMarker,
   MglNavigationControl,
-  MglScaleControl,
-  MglPopup
+  MglPopup,
+  MglScaleControl
 } from 'vue-mapbox';
 
 export default {
@@ -15,21 +17,12 @@ export default {
   props: [],
   data: function () {
     return {
+      buildno : process.env.BUILD_NO,
       featuresList: [...testBlob.features],
       accessToken: 'pk.eyJ1IjoibnNpcmFtc2V0dHkiLCJhIjoiY2sxeXF2ZmZjMHE5ZDNubXQwOWNiOXUxaCJ9.JrWqpd_aK4Ej-xFTygFohg', // your access token. Needed if you using Mapbox maps
       mapStyle: 'mapbox://styles/mapbox/streets-v11',
-      zoom: 15,
-      filters: {
-        Type : '',
-        State : '',
-        Suburb : '',
-        Stage : '',
-        Category: '',
-        SubCategory : '',
-        Council : '',
-        Status : '',
-        Ownership : ''
-      }
+      zoom: 14,
+      filters: store.getters['filters'] ? store.getters['filters'] : {...initialState.filters}
     };
   },
   created: function () {
@@ -39,17 +32,8 @@ export default {
       return [...new Set(this.featuresList.map(item => item.properties.project[key]))];
     },
     resetFilters : function(){
-      this.$set(this,'filters',{
-        Type : '',
-        State : '',
-        Suburb : '',
-        Stage : '',
-        Category: '',
-        SubCategory : '',
-        Council : '',
-        Status : '',
-        Ownership : ''
-      })
+      this.$set(this, 'filters', {...initialState.filters});
+      store.dispatch('CLEAR_ALL_DATA');
     }
   },
   computed: {
@@ -57,7 +41,7 @@ export default {
       return this.filteredFeatures[0] ? this.filteredFeatures[0].geometry.coordinates : this.featuresList[0].geometry.coordinates
     },
     filteredFeatures: function () {
-      let filteredFeatures = this.featuresList.filter((feature)=>{
+      return this.featuresList.filter((feature) => {
         return (
           (!this.filters.Category || feature.properties.project.Category === this.filters.Category)
           && (!this.filters.Type || feature.properties.project.Type === this.filters.Type)
@@ -70,8 +54,14 @@ export default {
           && (!this.filters.Ownership || feature.properties.project.Ownership === this.filters.Ownership)
         );
       });
-      console.log(filteredFeatures.length);
-      return filteredFeatures;
+    }
+  },
+  watch: {
+    filters: {
+      handler: function (newVal, oldVal) {
+        store.dispatch('UPDATE_FILTERS', this.filters);
+      },
+      deep: true
     }
   },
   components: {

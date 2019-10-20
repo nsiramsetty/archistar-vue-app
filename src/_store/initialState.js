@@ -1,6 +1,15 @@
 let defaultState = {
-  mobile : '',
-  isMobileVerified : false
+  filters: {
+    Type: '',
+    State: '',
+    Suburb: '',
+    Stage: '',
+    Category: '',
+    SubCategory: '',
+    Council: '',
+    Status: '',
+    Ownership: ''
+  }
 };
 
 export const initialState = defaultState;

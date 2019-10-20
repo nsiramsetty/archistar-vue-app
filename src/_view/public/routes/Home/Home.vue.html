@@ -1,12 +1,11 @@
-<section class="home" style="height : 600px"
-         xmlns:v-b-tooltip="http://www.w3.org/1999/xhtml"
+<section class="home"
          xmlns:v-bind="http://www.w3.org/1999/xhtml"
-         xmlns:v-on="http://www.w3.org/1999/xhtml">
+>
   <div class="row">
     <div class="col-12 col-md-4">
       <div class="card card-dark-grey">
         <div class="card-header">
-          <span class="pull-left"><i class="fa fa-cog"></i></span>Filter
+          <span class="pull-left"><i class="fa fa-filter"></i></span>Filter
         </div>
         <div class="card-body">
           <div class="row" >
@@ -20,10 +19,18 @@
               </div>
             </div>
             <div class="col-6">
-              <button class="btn mt-4 btn-primary" @click="resetFilters()">Reset All</button>
+              <button @click="resetFilters()" class="btn mt-4 btn-sm btn-primary">Reset All</button>
             </div>
           </div>
         </div>
+      </div>
+      <hr/>
+      <div class="footer mt-4">
+        <p class="small text-center" >
+          Designed & Developed By Naresh Siramsetty
+          <br>
+          Version : {{buildno}}
+        </p>
       </div>
     </div>
     <div class="col-12 col-md-8" >
@@ -31,33 +38,37 @@
         <div class="card-header">
           <span class="pull-left"><i class="fa fa-list"></i></span>{{filteredFeatures.length}} Records
         </div>
-        <div class="card-body" id="map-container">
-          <MglMap container="map-container"
-                  :accessToken="accessToken"
-                  :mapStyle.sync="mapStyle"
-                  :zoom="zoom"
-                  :center="center">
-            <MglAttributionControl></MglAttributionControl>
-            <MglNavigationControl position="bottom-left"></MglNavigationControl>
-            <MglGeolocateControl position="top-right"></MglGeolocateControl>
-            <MglScaleControl></MglScaleControl>
-            <MglMarker :coordinates="feature.geometry.coordinates" :color="feature.properties.color" v-for="feature in filteredFeatures" :key="feature.properties.id">
-              <MglPopup>
-                <div class="card">
-                  <div class="card-header"><i class="fa fa-info-circle"></i> Information </div>
-                  <div class="card-body">
-                    <strong>ID : {{feature.properties.id}}<br>
-                      Title : {{feature.properties.project.Title}}<br>
-                      Address : {{feature.properties.project.Address}}<br>
-                      <template  v-for="(key,value) in filters">
-                        {{value}} : {{feature.properties.project[value]}}<br>
-                      </template></strong>
-                  </div>
+      </div>
+      <div id="map-container">
+        <MglMap :accessToken="accessToken"
+                :center="center"
+                :mapStyle.sync="mapStyle"
+                :zoom="zoom"
+                container="map-container">
+          <MglAttributionControl></MglAttributionControl>
+          <MglNavigationControl position="bottom-left"></MglNavigationControl>
+          <MglGeolocateControl position="top-right"></MglGeolocateControl>
+          <MglScaleControl></MglScaleControl>
+          <MglMarker :color="feature.properties.color" :coordinates="feature.geometry.coordinates"
+                     :key="feature.properties.id" v-for="feature in filteredFeatures">
+            <MglPopup>
+              <div class="card mt-2">
+                <div class="card-header">
+                  <i class="fa fa-info-circle"></i> Information
                 </div>
-              </MglPopup>
-            </MglMarker>
-          </MglMap>
-        </div>
+                <div class="card-body">
+                  <strong>ID : {{feature.properties.id}}<br>
+                    Title : {{feature.properties.project.Title}}<br>
+                    Address : {{feature.properties.project.Address}}<br>
+                    <template v-for="(key,value) in filters">
+                      {{value}} : {{feature.properties.project[value]}}<br>
+                    </template>
+                  </strong>
+                </div>
+              </div>
+            </MglPopup>
+          </MglMarker>
+        </MglMap>
       </div>
     </div>
   </div>
