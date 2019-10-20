@@ -1,13 +1,7 @@
+// Just Implemented a Framework for Test,
+// Ideal Test cases were not implemented due to time limit.
 import Vue from 'Vue';
-import Bars from '../../../src/_view/public/routes/Home/Home.vue.js';
-describe('Optus Bars - UI Test', () => {
-  it('Created the Component', () => {
-    expect(typeof Bars.created).toBe('function');
-  });
+import Home from '../../../src/_view/public/routes/Home/Home.vue.js';
+describe('Archistar AI - Vue JS - Coding Test', () => {
 
-  it('Initialized Default Data', () => {
-    expect(typeof Bars.data).toBe('function');
-    const defaultData = Bars.data();
-    expect(defaultData.controllers.selectedBar).toBe(0);
-  });
 });

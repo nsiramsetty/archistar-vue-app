@@ -18,7 +18,16 @@
                 </select>
               </div>
             </div>
-            <div class="col-6">
+          </div>
+          <hr/>
+          <div class="row">
+            <div class="col-12">
+              <label>Value</label>
+              <vue-range-slider class="mt-5" v-model="rangeFilters['Value'].value" :min="rangeFilters['Value'].min" :max="rangeFilters['Value'].max" :enable-cross="false"></vue-range-slider>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-right">
               <button @click="resetFilters()" class="btn mt-4 btn-sm btn-primary">Reset All</button>
             </div>
           </div>
@@ -63,6 +72,7 @@
                     <template v-for="(key,value) in filters">
                       {{value}} : {{feature.properties.project[value]}}<br>
                     </template>
+                    Value : {{feature.properties.project.Value}}<br>
                   </strong>
                 </div>
               </div>

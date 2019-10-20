@@ -1,6 +1,8 @@
 let testBlob = require('../../../../_data/testBlob');
 import store from '../../../../_store';
 import {initialState} from "../../../../_store/initialState";
+import 'vue-range-component/dist/vue-range-slider.css';
+import VueRangeSlider from 'vue-range-component';
 import {
   MglAttributionControl,
   MglFullscreenControl,
@@ -22,7 +24,14 @@ export default {
       accessToken: 'pk.eyJ1IjoibnNpcmFtc2V0dHkiLCJhIjoiY2sxeXF2ZmZjMHE5ZDNubXQwOWNiOXUxaCJ9.JrWqpd_aK4Ej-xFTygFohg', // your access token. Needed if you using Mapbox maps
       mapStyle: 'mapbox://styles/mapbox/streets-v11',
       zoom: 14,
-      filters: store.getters['filters'] ? store.getters['filters'] : {...initialState.filters}
+      filters: store.getters['filters'] ? store.getters['filters'] : {...initialState.filters},
+      rangeFilters:{
+        'Value' : {
+          value: [Math.min(...[...testBlob.features].map(item => item.properties.project['Value'])), Math.max(...[...testBlob.features].map(item => item.properties.project['Value']))],
+          min: Math.min(...[...testBlob.features].map(item => item.properties.project['Value'])),
+          max: Math.max(...[...testBlob.features].map(item => item.properties.project['Value']))
+        }
+      }
     };
   },
   created: function () {
@@ -33,6 +42,7 @@ export default {
     },
     resetFilters : function(){
       this.$set(this, 'filters', {...initialState.filters});
+      this.$set(this.rangeFilters.Value, 'value', [this.rangeFilters.Value.min,this.rangeFilters.Value.max]);
       store.dispatch('CLEAR_ALL_DATA');
     }
   },
@@ -52,6 +62,7 @@ export default {
           && (!this.filters.Council || feature.properties.project.Council === this.filters.Council)
           && (!this.filters.Status || feature.properties.project.Status === this.filters.Status)
           && (!this.filters.Ownership || feature.properties.project.Ownership === this.filters.Ownership)
+          && (parseInt(feature.properties.project.Value) >= this.rangeFilters['Value'].value[0] && parseInt(feature.properties.project.Value) <= this.rangeFilters['Value'].value[1])
         );
       });
     }
@@ -72,6 +83,7 @@ export default {
     MglAttributionControl,
     MglScaleControl,
     MglFullscreenControl,
-    MglPopup
+    MglPopup,
+    VueRangeSlider
   }
 }
