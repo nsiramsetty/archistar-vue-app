@@ -49,7 +49,7 @@
     "lodash": "4.17.11",
     "mapbox-gl": "^1.4.1",
     "moment": "latest",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "2.0.0",
     "ora": "1.4.0",
     "rimraf": "2.6.2",
