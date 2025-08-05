@@ -8,31 +8,58 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    productionSourceMap: true,
-    // Gzip off by default as many popular static hosts such as
-    // Surge or Netlify already gzip all static assets for you.
-    // Before setting to `true`, make sure to:
-    // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
-    productionGzipExtensions: ['js', 'css'],
-    // Run the build command with an extra argument to
-    // View the bundle analyzer report after build finishes:
-    // `npm run build --report`
-    // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
+    productionSourceMap: process.env.NODE_ENV !== 'production', // Only in dev
+    
+    // Enable Gzip compression for better performance
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css', 'svg', 'woff', 'ttf', 'eot'],
+    
+    // Bundle analyzer
+    bundleAnalyzerReport: process.env.npm_config_report,
+    
+    // Additional optimizations
+    cacheBusting: true,
+    
+    // CSS extraction
+    extractCSS: true,
+    
+    // Performance budgets (optional warnings)
+    performanceBudget: {
+      maxAssetSize: 250000,
+      maxEntrypointSize: 250000
+    }
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
-    autoOpenBrowser: true,
+    port: process.env.PORT || 8080,
+    autoOpenBrowser: false, // Set to false for better CI/CD compatibility
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-    // CSS Sourcemaps off by default because relative paths are "buggy"
-    // with this option, according to the CSS-Loader README
-    // (https://github.com/webpack/css-loader#sourcemaps)
-    // In our experience, they generally work as expected,
-    // just be aware of this issue when enabling this option.
-    cssSourceMap: true
+    
+    // Proxy configuration for API calls during development
+    proxyTable: {
+      // Example: proxy API calls to backend
+      // '/api': {
+      //   target: 'http://localhost:3000',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/api': ''
+      //   }
+      // }
+    },
+    
+    // Development server configuration
+    host: 'localhost', // can be overwritten by process.env.HOST
+    poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
+    
+    // Error overlay
+    errorOverlay: true,
+    notifyOnErrors: true,
+    
+    // CSS Sourcemaps - enabled for better debugging
+    cssSourceMap: true,
+    
+    // Dev tool for better debugging
+    devtool: 'cheap-module-eval-source-map'
   }
 };
